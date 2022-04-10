@@ -121,20 +121,26 @@ const deconstructSecretName = (secretName: string, secretPrefix = ''): string =>
 
 const getSecretNamesToFetch =
   (secretsManagerClient: SecretsManager, inputSecretNames: string[], secretPrefix = ''): Promise<Array<string>> => {
+    const hasWildcard: boolean = inputSecretNames.some(secretName => secretName.includes('*'))
+
     return new Promise<Array<string>>((resolve, reject) => {
       // list secrets, filter against wildcards and fetch filtered secrets
       // else, fetch specified secrets directly
       const secretNames: string[] = []
-      listSecrets(secretsManagerClient)
-        .then(secrets => {
-          inputSecretNames.forEach(inputSecretName => {
-            secretNames.push(...filterBy(secrets, constructSecretName(inputSecretName, secretPrefix)))
+      if (hasWildcard) {
+        listSecrets(secretsManagerClient)
+          .then(secrets => {
+            inputSecretNames.forEach(inputSecretName => {
+              secretNames.push(...filterBy(secrets, constructSecretName(inputSecretName, secretPrefix)))
+            })
+            resolve([...new Set(secretNames)])
           })
-          resolve([...new Set(secretNames)])
-        })
-        .catch(err => {
-          reject(err)
-        })
+          .catch(err => {
+            reject(err)
+          })
+      } else {
+        resolve([...new Set(inputSecretNames.map(n => constructSecretName(n, secretPrefix)))])
+      }
     })
   }
 
