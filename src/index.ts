@@ -18,6 +18,10 @@ const AWSConfig = {}
 
 const secretsManagerClient = getSecretsManagerClient(AWSConfig)
 
+core.info(
+  `Loading secrets ${inputSecretNames.toString()} with prefix: ${secretPrefix} and parse json: ${shouldParseJSON}`
+)
+
 getSecretValueMaps(secretsManagerClient, inputSecretNames, shouldParseJSON, secretPrefix)
   .then(maps => {
     injectSecretValueMapToEnvironment(maps)
