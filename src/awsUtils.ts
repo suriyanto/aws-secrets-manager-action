@@ -150,7 +150,10 @@ const normalizedSecretMaps = (maps: Array<any>, secretPrefix: string): Record<st
     Object.keys(e).map(k => [deconstructSecretName(k, secretPrefix), e[k]])
   ).flat()
   core.debug(`Normalized array: ${flatArray}`)
-  return new Map(flatArray)
+  const ret = new Map(flatArray)
+  core.debug(`Mapped of normalized: ${ret}`)
+
+  return ret
 }
 
 const getSecretValueMaps = (secretsManagerClient: SecretsManager,
