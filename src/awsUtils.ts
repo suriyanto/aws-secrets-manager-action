@@ -156,10 +156,12 @@ const getSecretValueMaps = (secretsManagerClient: SecretsManager,
   core.debug(`Will fetch ${inputSecretNames.length} secrets: ${inputSecretNames}`)
   return new Promise((resolve, reject) => {
     getSecretNamesToFetch(secretsManagerClient, inputSecretNames, secretPrefix).then(names => {
-      Promise.all(names.map(secretName => getSecretValueMap(secretsManagerClient, secretName, shouldParseJSON)))
-        .then(maps => {
-          resolve(normalizedSecretMaps(maps, secretPrefix))
-        })
+      core.debug(`Secrets to fetch: ${names.toString()}, requested: ${secretPrefix} - ${inputSecretNames.toString()}`)
+      Promise.all(names.map(secretName => {
+        core.debug(`Fetched secret value for: ${secretName}`)
+        return getSecretValueMap(secretsManagerClient, secretName, shouldParseJSON)
+      }))
+        .then(maps => resolve(normalizedSecretMaps(maps, secretPrefix)))
         .catch(err => reject(err))
     })
   })
