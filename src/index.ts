@@ -24,6 +24,7 @@ core.info(
 
 getSecretValueMaps(secretsManagerClient, inputSecretNames, shouldParseJSON, secretPrefix)
   .then(maps => {
+    core.debug(maps)
     injectSecretValueMapToEnvironment(maps)
   })
   .catch(err => {
