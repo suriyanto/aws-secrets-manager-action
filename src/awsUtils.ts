@@ -145,9 +145,11 @@ const getSecretNamesToFetch =
   }
 
 const normalizedSecretMaps = (maps: Array<any>, secretPrefix: string): Record<string, any> => {
+  core.debug(`Array to normalize: ${maps}`)
   const flatArray: Array<any> = maps.map(e =>
     Object.keys(e).map(k => [deconstructSecretName(k, secretPrefix), e[k]])
   ).flat()
+  core.debug(`Normalized array: ${flatArray}`)
   return new Map(flatArray)
 }
 
