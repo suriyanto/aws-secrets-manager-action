@@ -7,9 +7,6 @@ import { injectSecretValueMapToEnvironment } from './utils'
 // secretNames input string is a new line separated list of secret names. Take distinct secret names.
 const inputSecretNames: string[] = [...new Set(core.getMultilineInput(Inputs.SECRETS))]
 
-// Check if any secret name contains a wildcard '*'
-// const hasWildcard: boolean = inputSecretNames.some(secretName => secretName.includes('*'))
-
 const shouldParseJSON = core.getBooleanInput(Inputs.PARSE_JSON)
 
 const secretPrefix = core.getInput(Inputs.SECRET_PREFIX) || ''
@@ -24,7 +21,6 @@ core.info(
 
 getSecretValueMaps(secretsManagerClient, inputSecretNames, shouldParseJSON, secretPrefix)
   .then(maps => {
-    core.debug(maps)
     injectSecretValueMapToEnvironment(maps)
   })
   .catch(err => {

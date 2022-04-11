@@ -151,7 +151,7 @@ const normalizedSecretMaps = (maps, secretPrefix: string): Record<string, any> =
 
   const ret: Record<string, any> = {} as Record<string, any>
   flatArray.forEach((e: Array<string>) => ret[e[0]] = e[1])
-  core.debug(`Loaded secret names: ${Object.keys(ret)}`)
+  core.debug(`Fetched secret names: ${Object.keys(ret)}`)
 
   return ret
 }
