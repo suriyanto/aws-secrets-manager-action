@@ -61,7 +61,7 @@ export const getPOSIXString = (data: string): string => {
 }
 
 export const injectSecretValueMapToEnvironment = (secretValueMap: Record<string, any>): void => {
-  core.debug(`Preparing to inject ${secretValueMap.length} secrets to environment variable`)
+  core.debug(`Preparing to inject ${Object.keys(secretValueMap)} secrets to environment variable`)
 
   for (const secretName in secretValueMap) {
     const secretValue: string = secretValueMap[secretName]
